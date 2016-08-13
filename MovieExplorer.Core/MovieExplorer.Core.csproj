@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AkavacheSqliteLinkerOverride.cs" />
+    <Compile Include="DataAccessLayer\FavoritesAccessor.cs" />
     <Compile Include="DataAccessLayer\LocalCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceAccessLayer\MovieAccessor.cs" />

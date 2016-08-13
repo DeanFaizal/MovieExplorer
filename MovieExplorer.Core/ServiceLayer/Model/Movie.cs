@@ -9,10 +9,21 @@ namespace MovieExplorer.Core.ServiceLayer.Model
 {
     public class Movie
     {
-
+        private string _posterPath;
         [JsonProperty(PropertyName = "poster_path")]
-        public string PosterPath { get; set; }
-    
+        public string PosterPath
+        {
+            get
+            {
+                return _posterPath;
+            }
+            set
+            {
+                _posterPath = value;
+                _posterPath = string.Format("http://image.tmdb.org/t/p/w500/{0}", _posterPath);
+            }
+        }
+
         [JsonProperty(PropertyName = "adult")]
         public bool Adult { get; set; }
 
@@ -35,7 +46,7 @@ namespace MovieExplorer.Core.ServiceLayer.Model
         public string OriginalLanguage { get; set; }
 
         [JsonProperty(PropertyName = "title")]
-        public string Title{ get; set; }
+        public string Title { get; set; }
 
         [JsonProperty(PropertyName = "backdrop_path")]
         public string BackdropPath { get; set; }
@@ -47,9 +58,9 @@ namespace MovieExplorer.Core.ServiceLayer.Model
         public int VoteCount { get; set; }
 
         [JsonProperty(PropertyName = "video")]
-        public bool Video { get; set; }
+        public bool IsVideoAvailable { get; set; }
 
         [JsonProperty(PropertyName = "vote_average")]
-        public double VoteAverage { get; set; }
+        public double VoteAverage { get; set; }        
     }
 }

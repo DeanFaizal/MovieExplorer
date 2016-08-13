@@ -87,8 +87,17 @@
     <Compile Include="AkavacheSqliteLinkerOverride.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="UILayer\Controls\MovieExplorerButton.cs" />
+    <Compile Include="UILayer\MovieExplorerAppearance.cs" />
+    <Compile Include="UILayer\Controls\HorizontalFlowLayout.cs" />
+    <Compile Include="UILayer\Controls\HorizontalMovieScroller.cs" />
+    <Compile Include="UILayer\Controls\HorizontalMovieScrollerDataSource.cs" />
+    <Compile Include="UILayer\Controls\MovieCell.cs" />
+    <Compile Include="UILayer\FrameExtensions.cs" />
+    <Compile Include="UILayer\UIImageExtensions.cs" />
+    <Compile Include="UILayer\ViewControllers\MainVC.cs" />
+    <Compile Include="UILayer\ViewControllers\MovieDetailsVC.cs" />
     <None Include="app.config" />
-    <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
@@ -117,6 +126,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Core.2.2.5\lib\portable-windows8+net45+wp8\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -137,9 +147,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UILayer\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MovieExplorer.Core\MovieExplorer.Core.csproj">
       <Project>{396ae239-8876-4b9d-93ec-1d52eae0e340}</Project>

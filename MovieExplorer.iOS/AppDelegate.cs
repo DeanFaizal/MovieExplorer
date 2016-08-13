@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using MovieExplorer.iOS.UILayer.ViewControllers;
 using UIKit;
 
 namespace MovieExplorer.iOS
@@ -22,7 +23,7 @@ namespace MovieExplorer.iOS
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
             // If you have defined a root view controller, set it here:
-            // Window.RootViewController = myViewController;
+            Window.RootViewController = new UINavigationController(new MainVC());
 
             // make the window visible
             Window.MakeKeyAndVisible();

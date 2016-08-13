@@ -95,5 +95,6 @@ namespace MovieExplorer.Core.ServiceAccessLayer
             var results = await FetchForMovie<VideoResults>(endpoint: "videos", movieId: movieId);
             return results.Videos;
         }
+        
     }
 }

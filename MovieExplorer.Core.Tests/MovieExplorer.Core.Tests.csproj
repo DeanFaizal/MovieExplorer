@@ -94,6 +94,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AkavacheSqliteLinkerOverride.cs" />
+    <Compile Include="FavoritesAccessorTests.cs" />
     <Compile Include="LocalCacheTests.cs" />
     <Compile Include="MovieApiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
