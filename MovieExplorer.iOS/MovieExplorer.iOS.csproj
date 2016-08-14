@@ -85,23 +85,39 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AkavacheSqliteLinkerOverride.cs" />
+    <Compile Include="DataAccessLayer\ImageCache.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="UILayer\Controls\BoldLabel.cs" />
     <Compile Include="UILayer\Controls\MovieExplorerButton.cs" />
     <Compile Include="UILayer\MovieExplorerAppearance.cs" />
     <Compile Include="UILayer\Controls\HorizontalFlowLayout.cs" />
     <Compile Include="UILayer\Controls\HorizontalMovieScroller.cs" />
-    <Compile Include="UILayer\Controls\HorizontalMovieScrollerDataSource.cs" />
+    <Compile Include="UILayer\Controls\HorizontalMovieScrollerSource.cs" />
     <Compile Include="UILayer\Controls\MovieCell.cs" />
     <Compile Include="UILayer\FrameExtensions.cs" />
     <Compile Include="UILayer\UIImageExtensions.cs" />
     <Compile Include="UILayer\ViewControllers\MainVC.cs" />
     <Compile Include="UILayer\ViewControllers\MovieDetailsVC.cs" />
+    <BundleResource Include="Resources\Icon-60%402x.png" />
+    <BundleResource Include="Resources\Icon-Small-40%402x.png" />
+    <BundleResource Include="Resources\Icon.png" />
+    <BundleResource Include="Resources\Icon%402x.png" />
+    <BundleResource Include="Resources\Icon-Small.png" />
+    <BundleResource Include="Resources\Icon-Small%402x.png" />
+    <BundleResource Include="Resources\Default.png" />
+    <BundleResource Include="Resources\Default%402x.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
     <None Include="app.config" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
+    <BundleResource Include="Resources\Assets\Placeholder.png" />
+    <BundleResource Include="Resources\Assets\Placeholder%402x.png" />
+    <BundleResource Include="Resources\Assets\Placeholder%403x.png" />
     <Content Include="Entitlements.plist" />
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +169,23 @@
       <Project>{396ae239-8876-4b9d-93ec-1d52eae0e340}</Project>
       <Name>MovieExplorer.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\movie_icon.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\movie_icon@1,5x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\movie_icon@2x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

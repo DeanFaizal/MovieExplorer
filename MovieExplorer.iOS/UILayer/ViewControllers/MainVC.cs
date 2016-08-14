@@ -24,9 +24,9 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             Initialize();
         }
 
-        void Initialize()
+        async void Initialize()
         {
-            View.BackgroundColor = UIColor.White;
+            View.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_LIGHT_GRAY;
             var movieListCount = LIST_TITLES.Length;
 
             _movieApiDictionary = new Dictionary<string, Func<Task<List<Movie>>>>
@@ -36,15 +36,21 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
                 { LIST_TITLES[2], ()=>MovieAccessor.Instance.GetNowPlaying() }
             };
 
+            //Initialize UI
             var contentFrame = View.Frame.AddTopMargin(MovieExplorerAppearance.STATUS_BAR_HEIGHT + MovieExplorerAppearance.NAVIGATION_BAR_HEIGHT);
             var verticalFrames = contentFrame.DivideVertical(movieListCount);
-            for (int i = 0; i < 1; i++)// movieListCount; i++)
+            for (int i = 0; i < movieListCount; i++)
             {
-                var horizontalMovieScroller = new HorizontalMovieScroller(contentFrame, LIST_TITLES[i]);//verticalFrames[i], LIST_TITLES[i]);
+                var horizontalMovieScroller = new HorizontalMovieScroller(verticalFrames[i], LIST_TITLES[i]);
                 horizontalMovieScroller.MovieSelected += OnMovieSelected;
                 _movieScrollers.Add(LIST_TITLES[i], horizontalMovieScroller);
                 View.AddSubview(horizontalMovieScroller);
-                LoadMoviesForList(LIST_TITLES[i]);
+            }
+
+            //Then load the movies
+            for (int i = 0; i < movieListCount; i++)
+            {
+                await LoadMoviesForList(LIST_TITLES[i]);
             }
         }
 

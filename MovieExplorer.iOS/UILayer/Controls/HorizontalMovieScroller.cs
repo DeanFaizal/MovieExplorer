@@ -17,18 +17,31 @@ namespace MovieExplorer.iOS.UILayer.Controls
         public HorizontalMovieScroller(CGRect frame, string title, List<Movie> movies = null) : base(frame)
         {
             frame = frame.Reset();
-            var titleLabel = new UILabel();
-            titleLabel.Text = title;
+            var titleLabel = new BoldLabel(frame, title);
             titleLabel.SizeToFit();
+            titleLabel.Frame = titleLabel.Frame.SetX(MovieExplorerAppearance.DEFAULT_MARGIN).SetY(MovieExplorerAppearance.DEFAULT_MARGIN);
             AddSubview(titleLabel);
 
-            _movieCollectionView = new UICollectionView(frame, new UICollectionViewFlowLayout {
-                ItemSize = MovieExplorerAppearance.POSTER_SIZE,
-                MinimumInteritemSpacing = 0.0f,
-                ScrollDirection = UICollectionViewScrollDirection.Horizontal });
-            var cellId = "Cell";
-            _movieCollectionView.RegisterClassForCell(typeof(MovieCell), cellId);
-            _movieCollectionSource = new HorizontalMovieScrollerSource(movies, cellId);
+            var movieCollectionViewFrame = frame.AddTopMargin(titleLabel.Frame.Bottom + MovieExplorerAppearance.HALF_MARGIN);
+            var itemHeight = movieCollectionViewFrame.Height;
+            var itemWidth = MovieExplorerAppearance.POSTER_WIDTH_TO_HEIGHT_RATIO * itemHeight;
+
+            _movieCollectionView = new UICollectionView(movieCollectionViewFrame, new UICollectionViewFlowLayout
+            {
+                ItemSize = new CGSize(itemWidth, itemHeight),
+                ScrollDirection = UICollectionViewScrollDirection.Horizontal
+            });
+            _movieCollectionView.BackgroundColor = UIColor.Clear;
+            _movieCollectionView.ShowsHorizontalScrollIndicator = false;
+            _movieCollectionView.ShowsVerticalScrollIndicator = false;
+
+            _movieCollectionView.ContentInset = new UIEdgeInsets(
+                top: 0.0f,
+                left: MovieExplorerAppearance.DEFAULT_MARGIN,
+                bottom: 0.0f,
+                right: MovieExplorerAppearance.DEFAULT_MARGIN);
+            _movieCollectionView.RegisterClassForCell(typeof(MovieCell), MovieCell.CELL_ID);
+            _movieCollectionSource = new HorizontalMovieScrollerSource(movies);
             _movieCollectionSource.MovieSelected += (sender, movie) =>
             {
                 MovieSelected?.Invoke(this, movie);

@@ -187,10 +187,10 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
             var scrollView = new UIScrollView(frame);
             scrollView.ContentInset = new UIEdgeInsets(
-                top: 0.0f,//MovieExplorerAppearance.DEFAULT_MARGIN,
-                left: 0.0f,//MovieExplorerAppearance.DEFAULT_MARGIN,
+                top: 0.0f,
+                left: 0.0f,
                 bottom: MovieExplorerAppearance.DEFAULT_MARGIN * 10.0f,
-                right: 0.0f);// MovieExplorerAppearance.DEFAULT_MARGIN);
+                right: 0.0f);
             scrollView.ContentSize = movieDescriptionLabel.Frame.Size;
             scrollView.AddSubview(movieDescriptionLabel);
 

@@ -19,7 +19,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
             SetTitleColor(UIColor.White, UIControlState.Normal);
 
             SetTitle(title, UIControlState.Normal);
-            Font = UIFont.BoldSystemFontOfSize(MovieExplorerAppearance.LARGE_FONT_SIZE);
+            Font = MovieExplorerAppearance.GetBoldFont();
         }
     }
 }

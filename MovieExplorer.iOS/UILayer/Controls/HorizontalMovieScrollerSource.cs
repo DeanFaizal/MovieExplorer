@@ -11,7 +11,6 @@ namespace MovieExplorer.iOS.UILayer.Controls
 {
     public class HorizontalMovieScrollerSource : UICollectionViewSource
     {
-        readonly string _cellId;
         List<Movie> _movies;
 
         public event EventHandler<Movie> MovieSelected;
@@ -21,10 +20,9 @@ namespace MovieExplorer.iOS.UILayer.Controls
             set { _movies = value; }
         }
 
-        public HorizontalMovieScrollerSource(List<Movie> movies, string cellId)
+        public HorizontalMovieScrollerSource(List<Movie> movies)
         {
             _movies = movies;
-            _cellId = cellId;
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -41,10 +39,10 @@ namespace MovieExplorer.iOS.UILayer.Controls
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            var movieCell = (MovieCell)collectionView.DequeueReusableCell(_cellId, indexPath);
+            var movieCell = (MovieCell)collectionView.DequeueReusableCell(MovieCell.CELL_ID, indexPath);
             
             var movie = _movies[indexPath.Row];
-            movieCell.PosterUrl = movie.PosterPath;
+            movieCell.SetMovie(movie);
             return movieCell;
         }
 

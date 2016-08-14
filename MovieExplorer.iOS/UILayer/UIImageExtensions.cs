@@ -17,20 +17,5 @@ namespace MovieExplorer.iOS.UILayer
             var data = await httpClient.GetByteArrayAsync(imageUrl);
             return UIImage.LoadFromData(NSData.FromArray(data));
         }
-
-        public static async Task<UIImage> LoadImageFromCache(this string imageUrl)
-        {
-            UIImage image;
-            try
-            {
-                image = await LocalCache.Instance.Load<UIImage>(imageUrl);
-            }
-            catch (Exception ex)
-            {
-                image = await imageUrl.LoadImageFromUrl();
-                await LocalCache.Instance.Save(imageUrl, image);
-            }
-            return image;
-        }
     }
 }
