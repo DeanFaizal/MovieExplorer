@@ -11,7 +11,7 @@ using MovieExplorer.Core.ServiceAccessLayer;
 
 namespace MovieExplorer.iOS.UILayer.ViewControllers
 {
-    public class MainVC : UIViewController
+    public class MainVC : BaseViewController
     {
         readonly string[] LIST_TITLES = { "Top Rated", "Popular", "Now Playing" };
         Dictionary<string, Func<Task<List<Movie>>>> _movieApiDictionary;
@@ -21,23 +21,13 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            InitializeNavBar();
             Initialize();
         }
-
-        void InitializeNavBar()
-        {
-            NavigationController.NavigationBar.BarTintColor = MovieExplorerAppearance.MOVIE_EXPLORER_DARK_GRAY;
-
-            Title = "Movie Explorer";
-            NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes
-            {
-                ForegroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_ORANGE,
-                Font = MovieExplorerAppearance.NavBarTitleFont            };
-        }
-
+        
         async void Initialize()
         {
+            Title = "Movie Explorer";
+
             View.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_LIGHT_GRAY;
             var movieListCount = LIST_TITLES.Length;
 
@@ -60,10 +50,13 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             }
 
             //Then load the movies
+            var tasks = new Task[movieListCount];
             for (int i = 0; i < movieListCount; i++)
             {
-                await LoadMoviesForList(LIST_TITLES[i]);
+                tasks[i] = LoadMoviesForList(LIST_TITLES[i]);
             }
+
+            await Task.WhenAll(tasks);
         }
 
         async Task LoadMoviesForList(string listTitle)

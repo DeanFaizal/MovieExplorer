@@ -18,7 +18,7 @@ namespace MovieExplorer.iOS.UILayer
         public static readonly nfloat HALF_MARGIN = 4.0f;
         public static readonly nfloat BUTTON_INSETS = 6.0f;
         public static readonly nfloat DEFAULT_BUTTON_HEIGHT = 32.0f;
-        
+
 
         //SIZES
         public static readonly nfloat POSTER_HEIGHT_TO_WIDTH_RATIO = 1.5f;
@@ -32,6 +32,8 @@ namespace MovieExplorer.iOS.UILayer
 
         //Colors
         public static readonly UIColor MOVIE_EXPLORER_ORANGE = UIColor.FromRGB(225, 155, 44);
+        public static readonly UIColor MOVIE_EXPLORER_GREEN = UIColor.FromRGB(163, 202, 25);
+        public static readonly UIColor MOVIE_EXPLORER_BRIGHT_ORANGE = UIColor.FromRGB(219, 176, 1);
         public static readonly UIColor MOVIE_EXPLORER_LIGHT_GRAY = UIColor.FromRGB(85, 85, 85);
         public static readonly UIColor MOVIE_EXPLORER_DARK_GRAY = UIColor.FromRGB(50, 50, 50);
 
@@ -39,7 +41,7 @@ namespace MovieExplorer.iOS.UILayer
         //FONTS
         public static readonly string STANDARD_FONT_NAME = "ArialMT";
         public static readonly string BOLD_FONT_NAME = "Arial-BoldMT";
-        public static readonly nfloat NAV_TITLE_FONT_SIZE = 20.0f;
+        public static readonly nfloat NAV_TITLE_FONT_SIZE = 16.0f;
         public static readonly nfloat STANDARD_FONT_SIZE = 14.0f;
         public static readonly nfloat SMALL_FONT_SIZE = 12.0f;
         public static readonly nfloat MICRO_FONT_SIZE = 10.0f;
@@ -57,6 +59,14 @@ namespace MovieExplorer.iOS.UILayer
             get
             {
                 return UIFont.FromName(BOLD_FONT_NAME, STANDARD_FONT_SIZE);
+            }
+        }
+
+        public static UIFont SmallBoldFont
+        {
+            get
+            {
+                return UIFont.FromName(BOLD_FONT_NAME, SMALL_FONT_SIZE);
             }
         }
 

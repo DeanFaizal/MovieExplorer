@@ -45,7 +45,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
             movieCell.SetMovie(movie);
             return movieCell;
         }
-
+        
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var movie = _movies[indexPath.Row];

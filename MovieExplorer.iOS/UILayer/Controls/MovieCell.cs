@@ -20,12 +20,18 @@ namespace MovieExplorer.iOS.UILayer.Controls
         [Export("initWithFrame:")]
         public MovieCell(CGRect frame) : base(frame)
         {
+            Alpha = 0;
             BackgroundColor = UIColor.White;
 
             _imageView = new UIImageView(frame.AddMargin(1.0f));
             _imageView.Image = UIImage.FromBundle("Assets/Placeholder.png");
             _imageView.Center = frame.GetCenter();
             AddSubview(_imageView);
+
+            Animate(0.2d, animation: () =>
+            {
+                Alpha = 1.0f;
+            });
         }
 
         public async void SetMovie(Movie movie)

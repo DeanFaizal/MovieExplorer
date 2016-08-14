@@ -14,12 +14,12 @@ using MediaPlayer;
 
 namespace MovieExplorer.iOS.UILayer.ViewControllers
 {
-    public class MovieDetailsVC : UIViewController
+    public class MovieDetailsVC : BaseViewController
     {
         Movie _movie;
         List<Video> _videos;
         MovieExplorerButton _playVideoButton;
-        UIImageView _posterView;
+        UIImageView _posterImageView;
         bool _isFavorite = false;
 
         UIButton _saveToFavoritesButton;
@@ -34,7 +34,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             base.ViewDidLoad();
             await Initialize();
         }
-
+        
         private async Task Initialize()
         {
             View.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_LIGHT_GRAY;
@@ -43,15 +43,24 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
             var contentFrames = mainContentFrame.DivideVertical(3);
 
+            //Movie details/dashboard
             var movieDetailsView = GenerateMovieDetailsView(contentFrames[0]);
             View.AddSubview(movieDetailsView);
 
+            //Movie description
             var movieDescriptionView = GenerateMovieDescriptionView(contentFrames[1]);
             View.AddSubview(movieDescriptionView);
 
+            //Similar movies
             var similarMoviesView = GenerateSimilarMoviesView(contentFrames[2]);
             View.AddSubview(similarMoviesView);
 
+            //Load data
+            await LoadData(similarMoviesView);
+        }
+
+        private async Task LoadData(HorizontalMovieScroller similarMoviesView)
+        {
             var loadPosterTask = LoadPoster();
             var updateFavoriteButtonTask = UpdateFavoriteButton();
             var loadSimilarMoviesTask = similarMoviesView.LoadMovies(async () =>
@@ -69,11 +78,9 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         private UIView GenerateMovieDetailsView(CGRect frame)
         {
             var movieDetailsView = new UIView(frame);
-            movieDetailsView.BackgroundColor = UIColor.Green;
             var movieDetailFrames = frame.Reset().AddDefaultMargin().DivideHorizontal(new float[2] { 1.0f, 2.0f });
-            _posterView = new UIImageView(movieDetailFrames[0]);
-            _posterView.BackgroundColor = UIColor.Purple;
-            movieDetailsView.AddSubview(_posterView);
+            var posterView = GeneratePosterView(movieDetailFrames[0]);
+            movieDetailsView.AddSubview(posterView);
 
             var movieInfoView = GenerateMovieInfoView(movieDetailFrames[1]);
             movieDetailsView.AddSubview(movieInfoView);
@@ -81,34 +88,48 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             return movieDetailsView;
         }
 
+        private UIView GeneratePosterView(CGRect frame)
+        {
+            var posterView = new UIView(frame);
+            posterView.BackgroundColor = UIColor.White;
+            _posterImageView = new UIImageView(frame.Reset().AddMargin(1.0f));
+            posterView.AddSubview(_posterImageView);
+
+            return posterView;
+        }
+
         private async Task LoadPoster()
         {
-            _posterView.Image = await _movie.PosterPath.LoadImageFromUrl();
+            _posterImageView.Image = await _movie.PosterPath.LoadImageFromUrl();
         }
 
         private UIView GenerateMovieInfoView(CGRect frame)
         {
-            var movieInfoView = new UIView(frame.AddLeftMargin(MovieExplorerAppearance.DEFAULT_MARGIN));
-            movieInfoView.BackgroundColor = UIColor.Purple;
+            var movieInfoView = new UIView(frame.AddLeftMargin(MovieExplorerAppearance.DEFAULT_MARGIN));           
 
             //From top
-            var titleLabel = new UILabel(new CGRect(0, 0, 1, 1));
-            titleLabel.Text = _movie.Title;
+            //Title label
+            var titleLabel = new BoldLabel(movieInfoView.Frame.Reset(), _movie.Title);
             titleLabel.SizeToFit();
             movieInfoView.AddSubview(titleLabel);
 
-            var releaseDateLabel = new UILabel(new CGRect(0, titleLabel.Frame.Bottom.AddDefaultMargin(), 1, 1));
-            releaseDateLabel.Text = _movie.ReleaseDate;
+            //Release date label
+            var releaseDateLabel = new MovieExplorerLabel(movieInfoView.Frame.Reset().SetY(titleLabel.Frame.Bottom + MovieExplorerAppearance.HALF_MARGIN), _movie.ReadableReleaseDate);
+            releaseDateLabel.Font = MovieExplorerAppearance.SmallFont;
+            releaseDateLabel.Lines = 1;
             releaseDateLabel.SizeToFit();
             movieInfoView.AddSubview(releaseDateLabel);
 
+            //Ratings view
             var ratingsViewOrigin = new CGPoint(0, releaseDateLabel.Frame.Bottom.AddDefaultMargin());
             var ratingsView = GenerateRatingsView(ratingsViewOrigin, _movie.VoteAverage);
             movieInfoView.AddSubview(ratingsView);
 
             //From bottom
+            //Save favorite button
             var saveToFavoritesButtonFrame = new CGRect(0, 0, 0.0f, MovieExplorerAppearance.DEFAULT_BUTTON_HEIGHT);
-            _saveToFavoritesButton = new MovieExplorerButton(saveToFavoritesButtonFrame, color: UIColor.Orange, title: "Save to Favorites");
+            _saveToFavoritesButton = new MovieExplorerButton(saveToFavoritesButtonFrame, color: MovieExplorerAppearance.MOVIE_EXPLORER_BRIGHT_ORANGE, title: "Save to Favorites");
+            _saveToFavoritesButton.Font = MovieExplorerAppearance.SmallBoldFont;
             _saveToFavoritesButton.TouchUpInside += async (sender, args) =>
             {
                 if (_isFavorite)
@@ -125,18 +146,18 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             _saveToFavoritesButton.Frame = _saveToFavoritesButton.Frame.SetY(movieInfoView.Frame.Bottom - _saveToFavoritesButton.Frame.Height - MovieExplorerAppearance.DEFAULT_MARGIN);
             movieInfoView.AddSubview(_saveToFavoritesButton);
 
+            //Play video button
             var playVideoButtonFrame = new CGRect(0, _saveToFavoritesButton.Frame.Top - MovieExplorerAppearance.DEFAULT_MARGIN / 2 - MovieExplorerAppearance.DEFAULT_BUTTON_HEIGHT, 1.0f, MovieExplorerAppearance.DEFAULT_BUTTON_HEIGHT);
             _playVideoButton = new MovieExplorerButton(playVideoButtonFrame, color: UIColor.Gray, title: "Loading Video...");
-            
+            _playVideoButton.Font = MovieExplorerAppearance.SmallBoldFont;
             _playVideoButton.TouchUpInside += (sender, args) =>
             {
                 PlayVideo();
             };
-
             _playVideoButton.SizeToFit();
             _playVideoButton.Frame = _playVideoButton.Frame.SetY(_saveToFavoritesButton.Frame.Top - _playVideoButton.Frame.Height - MovieExplorerAppearance.SMALL_MARGIN);
             movieInfoView.AddSubview(_playVideoButton);
-            
+
             return movieInfoView;
         }
 
@@ -163,9 +184,9 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private void PlayVideo()
         {
-            if (_videos!=null)
+            if (_videos != null)
             {
-                var video = _videos.FirstOrDefault(a=>a.Site.ToLower().Equals("youtube"));
+                var video = _videos.FirstOrDefault(a => a.Site.ToLower().Equals("youtube"));
                 if (video != null)
                 {
                     UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(string.Format("https://www.youtube.com/watch?v={0}", video.Key)));
@@ -176,20 +197,21 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         private UIView GenerateMovieDescriptionView(CGRect frame)
         {
             var movieDescriptionView = new UIView(frame);
-            movieDescriptionView.BackgroundColor = UIColor.Gray;
             frame = frame.Reset();
 
             var movieDescriptionLabel = new UILabel(frame.AddMargin(MovieExplorerAppearance.DEFAULT_MARGIN));
             movieDescriptionLabel.Lines = 0;
             movieDescriptionLabel.LineBreakMode = UILineBreakMode.WordWrap;
             movieDescriptionLabel.Text = _movie.Overview;
+            movieDescriptionLabel.Font = MovieExplorerAppearance.SmallFont;
+            movieDescriptionLabel.TextColor = UIColor.White;
             movieDescriptionLabel.SizeToFit();
 
             var scrollView = new UIScrollView(frame);
             scrollView.ContentInset = new UIEdgeInsets(
                 top: 0.0f,
                 left: 0.0f,
-                bottom: MovieExplorerAppearance.DEFAULT_MARGIN * 10.0f,
+                bottom: MovieExplorerAppearance.DEFAULT_MARGIN * 4.0f,
                 right: 0.0f);
             scrollView.ContentSize = movieDescriptionLabel.Frame.Size;
             scrollView.AddSubview(movieDescriptionLabel);
@@ -216,7 +238,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             _videos = await MovieAccessor.Instance.GetVideos(_movie.Id);
             _playVideoButton.SetTitle("Play Video", UIControlState.Normal);
             _playVideoButton.SizeToFit();
-            _playVideoButton.BackgroundColor = UIColor.Green;
+            _playVideoButton.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_GREEN;
         }
     }
 }

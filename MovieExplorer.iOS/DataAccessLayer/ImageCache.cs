@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using UIKit;
 using MovieExplorer.iOS.UILayer;
+using System.Collections.Concurrent;
 
 namespace MovieExplorer.iOS.DataAccessLayer
 {
     public class ImageCache
     {
-        private Dictionary<string, UIImage> _imageDictionary = new Dictionary<string, UIImage>();
+        private ConcurrentDictionary<string, UIImage> _imageDictionary = new ConcurrentDictionary<string, UIImage>();
 
         private static Lazy<ImageCache> _instance = new Lazy<ImageCache>();
 
@@ -41,7 +42,7 @@ namespace MovieExplorer.iOS.DataAccessLayer
                     image = await imageUrl.LoadImageFromUrl().ConfigureAwait(false);
                     if (!_imageDictionary.ContainsKey(imageUrl))
                     {
-                        _imageDictionary.Add(imageUrl, image);
+                        _imageDictionary.TryAdd(imageUrl, image);
                     }
                 }
             }

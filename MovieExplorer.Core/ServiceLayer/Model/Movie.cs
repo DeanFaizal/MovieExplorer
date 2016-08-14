@@ -61,6 +61,23 @@ namespace MovieExplorer.Core.ServiceLayer.Model
         public bool IsVideoAvailable { get; set; }
 
         [JsonProperty(PropertyName = "vote_average")]
-        public double VoteAverage { get; set; }        
+        public double VoteAverage { get; set; }
+
+        public string ReadableReleaseDate
+        {
+            get
+            {
+                DateTime releaseDateTime;
+                if (string.IsNullOrEmpty(ReleaseDate) ||
+                    !DateTime.TryParse(ReleaseDate, out releaseDateTime))
+                {
+                    return "Release date unavailable";
+                }
+                else
+                {
+                    return string.Format("Release Date: {0}", releaseDateTime.ToString("MM/dd/yyyy"));
+                }
+            }
+        }
     }
 }

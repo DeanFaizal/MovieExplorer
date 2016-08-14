@@ -6,15 +6,15 @@ using UIKit;
 
 namespace MovieExplorer.iOS.UILayer.Controls
 {
-    public class BoldLabel : UILabel
+    public class MovieExplorerLabel : UILabel
     {
-        public BoldLabel(CGRect frame, string text) : this(frame, text, UIColor.White) { }
+        public MovieExplorerLabel(CGRect frame, string text) : this(frame, text, UIColor.White) { }
 
-        public BoldLabel(CGRect frame, string text, UIColor textColor) : base(frame)
+        public MovieExplorerLabel(CGRect frame, string text, UIColor textColor) : base(frame)
         {
             Lines = 0;
             Text = text;
-            Font = MovieExplorerAppearance.BoldFont;
+            Font = MovieExplorerAppearance.StandardFont;
             TextColor = textColor;
             LineBreakMode = UILineBreakMode.WordWrap;
         }
