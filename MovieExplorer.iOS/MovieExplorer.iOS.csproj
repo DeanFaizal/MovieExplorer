@@ -110,6 +110,8 @@
     <BundleResource Include="Resources\Icon-Small.png" />
     <BundleResource Include="Resources\Icon-Small%402x.png" />
     <Compile Include="UILayer\ViewControllers\BaseViewController.cs" />
+    <BundleResource Include="Resources\Assets\Star.png" />
+    <BundleResource Include="Resources\Assets\EmptyStar.png" />
     <None Include="app.config" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />

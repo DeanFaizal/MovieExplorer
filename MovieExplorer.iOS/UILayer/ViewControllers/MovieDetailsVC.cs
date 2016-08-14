@@ -106,9 +106,12 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         {
             var movieDetailsView = new UIView(frame);
             var movieDetailFrames = frame.Reset().AddDefaultMargin().DivideHorizontal(new float[2] { 1.0f, 2.0f });
+
+            //Poster view
             var posterView = GeneratePosterView(movieDetailFrames[0]);
             movieDetailsView.AddSubview(posterView);
 
+            //Movie info view
             var movieInfoView = GenerateMovieInfoView(movieDetailFrames[1]);
             movieDetailsView.AddSubview(movieInfoView);
 
@@ -198,8 +201,46 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private UIView GenerateRatingsView(CGPoint origin, double ratingAverage)
         {
-            var frame = new CGRect(origin, size: new CGSize());
-            return new UIView();
+            var ratingsView = new UIView();
+
+            var maxStars = 5; 
+            var stars = (int)ratingAverage/2; //rating average is over 10. Divide by 2 for the 5 star system
+            var starSize = 20.0f;
+
+            for (int i = 0; i < maxStars; i++)
+            {
+                var starImageFrame = new CGRect(i * starSize, 0, starSize, starSize);
+                var starImageView = new UIImageView(starImageFrame);
+                starImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+                if (i <= stars)
+                {
+                    starImageView.Image = UIImage.FromBundle("Assets/Star.png");
+                }
+                else
+                {
+                    starImageView.Image = UIImage.FromBundle("Assets/EmptyStar.png");
+                }
+                ratingsView.AddSubview(starImageView);
+            }
+
+            var voteCountText = string.Empty;
+            if (_movie.VoteCount == 1)
+            {
+                voteCountText = string.Format("(from 1 vote)");
+            }
+            else
+            {
+                voteCountText = string.Format("(from {0} votes)", _movie.VoteCount);
+            }                   
+            var ratingsLabel = new MovieExplorerLabel(new CGRect(0, starSize, 0, 0), voteCountText);
+            ratingsLabel.Font = MovieExplorerAppearance.MicroFont;
+            ratingsLabel.SizeToFit();
+            ratingsView.AddSubview(ratingsLabel);
+
+            var ratingsViewWidth = Math.Max(starSize * maxStars, ratingsLabel.Frame.Width);
+            ratingsView.Frame = new CGRect(origin.X, origin.Y, ratingsViewWidth, starSize + ratingsLabel.Frame.Height);
+
+            return ratingsView;
         }
 
         private async Task UpdateFavoriteButton()

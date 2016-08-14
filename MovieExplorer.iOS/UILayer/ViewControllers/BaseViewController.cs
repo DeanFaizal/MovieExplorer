@@ -22,6 +22,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
                 Font = MovieExplorerAppearance.NavBarTitleFont,
                 ForegroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_ORANGE
             };
+            NavigationController.NavigationBar.BarStyle = UIBarStyle.Black;
         }
     }
 }
