@@ -120,10 +120,14 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private UIView GeneratePosterView(CGRect frame)
         {
-            var posterView = new UIView(frame);
+            var fittedFrame = frame.FitHeightToWidthRatio(MovieExplorerAppearance.POSTER_HEIGHT_TO_WIDTH_RATIO);
+            var posterView = new UIView(fittedFrame);
             posterView.BackgroundColor = UIColor.White;
-            _posterImageView = new UIImageView(frame.Reset().AddMargin(1.0f));
+
+            _posterImageView = new UIImageView(fittedFrame.Reset().AddMargin(1.0f));
             posterView.AddSubview(_posterImageView);
+
+            posterView.Center = frame.GetCenter();
 
             return posterView;
         }
@@ -147,8 +151,14 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
             //From top
             //Title label
-            var titleLabel = new BoldLabel(movieInfoView.Frame.Reset(), _movie.Title);
+            var titleLabel = new BoldLabel(movieInfoView.Frame.Reset().SetWidth(movieInfoView.Frame.Width), _movie.Title);
+            if (MovieExplorerAppearance.IsShortDevice) //iPhone 4 and earlier or iPads
+            {
+                titleLabel.Lines = 1;
+                titleLabel.LineBreakMode = UILineBreakMode.TailTruncation;
+            }
             titleLabel.SizeToFit();
+            titleLabel.Frame = titleLabel.Frame.SetWidth(movieInfoView.Frame.Width);
             movieInfoView.AddSubview(titleLabel);
 
             //Release date label
@@ -203,8 +213,8 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         {
             var ratingsView = new UIView();
 
-            var maxStars = 5; 
-            var stars = (int)ratingAverage/2; //rating average is over 10. Divide by 2 for the 5 star system
+            var maxStars = 5;
+            var stars = (int)ratingAverage / 2; //rating average is over 10. Divide by 2 for the 5 star system
             var starSize = 20.0f;
 
             for (int i = 0; i < maxStars; i++)
@@ -231,15 +241,26 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             else
             {
                 voteCountText = string.Format("(from {0} votes)", _movie.VoteCount);
-            }                   
-            var ratingsLabel = new MovieExplorerLabel(new CGRect(0, starSize, 0, 0), voteCountText);
+            }
+
+            var ratingsLabelFrame = new CGRect(0, starSize, 0, 0);
+
+            var ratingsLabel = new MovieExplorerLabel(ratingsLabelFrame, voteCountText);
             ratingsLabel.Font = MovieExplorerAppearance.MicroFont;
             ratingsLabel.SizeToFit();
             ratingsView.AddSubview(ratingsLabel);
 
-            var ratingsViewWidth = Math.Max(starSize * maxStars, ratingsLabel.Frame.Width);
-            ratingsView.Frame = new CGRect(origin.X, origin.Y, ratingsViewWidth, starSize + ratingsLabel.Frame.Height);
-
+            if (MovieExplorerAppearance.IsShortDevice) //iPhone 4 and earlier or iPads
+            {
+                ratingsLabelFrame = new CGRect(starSize * 5, (starSize / 2) - (ratingsLabel.Frame.Height / 2), ratingsLabel.Frame.Width, ratingsLabel.Frame.Height);
+                ratingsLabel.Frame = ratingsLabelFrame;
+                ratingsView.Frame = new CGRect(origin.X, origin.Y, ratingsLabel.Frame.Right, starSize);
+            }
+            else
+            {
+                var ratingsViewWidth = Math.Max(starSize * maxStars, ratingsLabel.Frame.Width);
+                ratingsView.Frame = new CGRect(origin.X, origin.Y, ratingsViewWidth, starSize + ratingsLabel.Frame.Height);
+            }
             return ratingsView;
         }
 

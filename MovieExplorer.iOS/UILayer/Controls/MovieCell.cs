@@ -25,7 +25,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
 
             _imageView = new UIImageView(frame.AddMargin(1.0f));
             _imageView.Image = UIImage.FromBundle("Assets/Placeholder.png");
-            _imageView.Center = frame.GetCenter();
+            _imageView.Center = frame.Reset().GetCenter();
             AddSubview(_imageView);
 
             Animate(0.2d, animation: () =>

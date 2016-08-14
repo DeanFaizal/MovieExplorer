@@ -75,7 +75,7 @@ namespace MovieExplorer.Core.ServiceLayer.Model
                 }
                 else
                 {
-                    return string.Format("Release Date: {0}", releaseDateTime.ToString("MM/dd/yyyy"));
+                    return string.Format("Release Date: {0}", releaseDateTime.ToString("M/d/yyyy"));
                 }
             }
         }

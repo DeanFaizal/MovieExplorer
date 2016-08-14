@@ -116,7 +116,7 @@ namespace MovieExplorer.iOS.UILayer
 
         public static CGPoint GetCenter(this CGRect frame)
         {
-            return new CGPoint(frame.Width / 2, frame.Height / 2);
+            return new CGPoint(frame.X + frame.Width / 2, frame.Y + frame.Height / 2);
         }
 
         public static CGRect SetX(this CGRect frame, nfloat x)
@@ -129,9 +129,51 @@ namespace MovieExplorer.iOS.UILayer
             return new CGRect(frame.X, y, frame.Width, frame.Height);
         }
 
-        public static CGRect SetSize(this CGRect frame, CGPoint size)
+        public static CGRect SetWidth(this CGRect frame, nfloat width)
         {
-            return new CGRect(frame.X, frame.Y, size.X, size.Y);
+            return new CGRect(frame.X, frame.Y, width, frame.Height);
+        }
+
+        public static CGRect SetHeight(this CGRect frame, nfloat height)
+        {
+            return new CGRect(frame.X, frame.Y, frame.Width, height);
+        }
+
+        public static CGRect SetSize(this CGRect frame, CGSize size)
+        {
+            return new CGRect(frame.X, frame.Y, size.Width, size.Height);
+        }
+
+        public static CGRect FitHeightToWidthRatio(this CGRect frame, nfloat desiredHeightToWidthRatio)
+        {
+            var frameHeightToWidthRatio = frame.GetHeightToWidthRatio();
+
+            nfloat fittedFrameWidth = 0.0f;
+            nfloat fittedFrameHeight = 0.0f;
+
+            if (frameHeightToWidthRatio < desiredHeightToWidthRatio) //fit to height
+            {
+                fittedFrameHeight = frame.Height;
+                fittedFrameWidth = fittedFrameHeight / desiredHeightToWidthRatio;
+
+            }
+            else //fit to width
+            {
+                fittedFrameWidth = frame.Width;
+                fittedFrameHeight = desiredHeightToWidthRatio * fittedFrameWidth;
+            }
+
+            return frame.SetSize(new CGSize(fittedFrameWidth, fittedFrameHeight));
+        }
+
+        public static nfloat GetHeightToWidthRatio(this CGRect frame)
+        {
+            return frame.Height / frame.Width;
+        }
+
+        public static nfloat GetWidthToHeightRatio(this CGRect frame)
+        {
+            return frame.Width / frame.Height;
         }
     }
 }

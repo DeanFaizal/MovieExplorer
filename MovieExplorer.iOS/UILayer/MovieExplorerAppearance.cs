@@ -93,5 +93,22 @@ namespace MovieExplorer.iOS.UILayer
                 return UIFont.FromName(STANDARD_FONT_NAME, MICRO_FONT_SIZE);
             }
         }
+
+
+        //DEVICE
+        public static bool IsShortDevice //Short iPhone (iPhone 4s & earlier) or iPad devices
+        {
+            get
+            {
+                var tallDeviceHeightToWidthRatio = 16.0f / 9.0f;
+                var screenBounds = UIScreen.MainScreen.Bounds;
+                var screenHeightToWidthRatio = screenBounds.Height / screenBounds.Width;
+                if (screenHeightToWidthRatio >= tallDeviceHeightToWidthRatio)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }
