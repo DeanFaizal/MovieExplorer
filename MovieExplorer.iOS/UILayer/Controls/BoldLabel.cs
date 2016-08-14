@@ -13,7 +13,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
         public BoldLabel(CGRect frame, string text, UIColor textColor) : base(frame)
         {
             Text = text;
-            Font = MovieExplorerAppearance.GetBoldFont();
+            Font = MovieExplorerAppearance.BoldFont;
             TextColor = textColor;
         }
     }

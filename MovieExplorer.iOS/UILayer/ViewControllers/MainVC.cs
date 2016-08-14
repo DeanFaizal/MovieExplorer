@@ -33,8 +33,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes
             {
                 ForegroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_ORANGE,
-                Font = MovieExplorerAppearance.GetNavBarTitleFont()
-            };
+                Font = MovieExplorerAppearance.NavBarTitleFont            };
         }
 
         async void Initialize()
