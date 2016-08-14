@@ -13,9 +13,16 @@ namespace MovieExplorer.iOS.UILayer
     {
         public static async Task<UIImage> LoadImageFromUrl(this string imageUrl)
         {
-            var httpClient = new HttpClient();
-            var data = await httpClient.GetByteArrayAsync(imageUrl);
-            return UIImage.LoadFromData(NSData.FromArray(data));
+            try
+            {
+                var httpClient = new HttpClient();
+                var data = await httpClient.GetByteArrayAsync(imageUrl);
+                return UIImage.LoadFromData(NSData.FromArray(data));
+            }
+            catch (Exception)
+            {
+            }
+            return null;
         }
     }
 }

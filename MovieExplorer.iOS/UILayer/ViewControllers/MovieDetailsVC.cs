@@ -11,6 +11,7 @@ using System.Linq;
 using MovieExplorer.iOS.UILayer.Controls;
 using Foundation;
 using MediaPlayer;
+using MovieExplorer.iOS.DataAccessLayer;
 
 namespace MovieExplorer.iOS.UILayer.ViewControllers
 {
@@ -34,13 +35,17 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             base.ViewDidLoad();
             await Initialize();
         }
-        
+
         private async Task Initialize()
         {
-            View.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_LIGHT_GRAY;
-
             var mainContentFrame = View.Frame.AddTopMargin(MovieExplorerAppearance.TOTAL_TOP_BAR_HEIGHT);
 
+
+            //Background
+            var backgroundView = await GenerateBackgroundView(mainContentFrame);
+            View.AddSubview(backgroundView);
+
+            //Content Frames
             var contentFrames = mainContentFrame.DivideVertical(3);
 
             //Movie details/dashboard
@@ -57,6 +62,28 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
             //Load data
             await LoadData(similarMoviesView);
+        }
+
+        private async Task<UIView> GenerateBackgroundView(CGRect frame)
+        {
+            var backgroundImageView = new UIImageView(frame);
+            backgroundImageView.ClipsToBounds = true;
+
+            var backgroundImage = await ImageCache.Instance.GetOrDownloadImage(_movie.PosterPath);
+            if (backgroundImage == null)
+            {
+                backgroundImage = UIImage.FromBundle("Assets/Placeholder.png");
+            }
+            backgroundImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+            backgroundImageView.Image = backgroundImage;
+            var blur = UIBlurEffect.FromStyle(UIBlurEffectStyle.Dark);
+            var blurView = new UIVisualEffectView(blur)
+            {
+                Frame = frame.Reset()
+            };
+
+            backgroundImageView.Add(blurView);
+            return backgroundImageView;
         }
 
         private async Task LoadData(HorizontalMovieScroller similarMoviesView)
@@ -100,12 +127,20 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private async Task LoadPoster()
         {
-            _posterImageView.Image = await _movie.PosterPath.LoadImageFromUrl();
+            var poster = await _movie.PosterPath.LoadImageFromUrl();
+            if (poster != null)
+            {
+                _posterImageView.Image = poster;
+            }
+            else
+            {
+                _posterImageView.Image = UIImage.FromBundle("Assets/Placeholder.png");
+            }
         }
 
         private UIView GenerateMovieInfoView(CGRect frame)
         {
-            var movieInfoView = new UIView(frame.AddLeftMargin(MovieExplorerAppearance.DEFAULT_MARGIN));           
+            var movieInfoView = new UIView(frame.AddLeftMargin(MovieExplorerAppearance.DEFAULT_MARGIN));
 
             //From top
             //Title label
@@ -236,7 +271,16 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         private async Task LoadVideos()
         {
             _videos = await MovieAccessor.Instance.GetVideos(_movie.Id);
-            _playVideoButton.SetTitle("Play Video", UIControlState.Normal);
+            if (_videos == null || _videos.Count == 0)
+            {
+                _playVideoButton.SetTitle("Video Unavailable", UIControlState.Normal);
+                _playVideoButton.BackgroundColor = UIColor.LightGray;
+            }
+            else
+            {
+                _playVideoButton.SetTitle("Play Video", UIControlState.Normal);
+                _playVideoButton.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_GREEN;
+            }
             _playVideoButton.SizeToFit();
             _playVideoButton.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_GREEN;
         }

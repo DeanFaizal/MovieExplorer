@@ -40,7 +40,7 @@ namespace MovieExplorer.iOS.DataAccessLayer
                 else
                 {
                     image = await imageUrl.LoadImageFromUrl().ConfigureAwait(false);
-                    if (!_imageDictionary.ContainsKey(imageUrl))
+                    if (!_imageDictionary.ContainsKey(imageUrl) && image!= default(UIImage))
                     {
                         _imageDictionary.TryAdd(imageUrl, image);
                     }

@@ -43,12 +43,15 @@ namespace MovieExplorer.iOS.UILayer.Controls
             }
             var uiImage = await ImageCache.Instance.GetOrDownloadImage(posterUrl);
 
-            Alpha = 0.0f;
-            _imageView.Image = uiImage;
-            Animate(0.2d, () =>
+            if (uiImage != null)
             {
-                Alpha = 1.0f;
-            });
+                Alpha = 0.0f;
+                _imageView.Image = uiImage;
+                Animate(0.2d, () =>
+                {
+                    Alpha = 1.0f;
+                });
+            }
         }
     }
 }

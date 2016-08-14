@@ -8,6 +8,7 @@ using CoreGraphics;
 using MovieExplorer.iOS.UILayer.Controls;
 using MovieExplorer.Core.ServiceLayer.Model;
 using MovieExplorer.Core.ServiceAccessLayer;
+using System.Runtime.CompilerServices;
 
 namespace MovieExplorer.iOS.UILayer.ViewControllers
 {
