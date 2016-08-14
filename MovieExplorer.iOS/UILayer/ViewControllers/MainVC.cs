@@ -21,7 +21,20 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            InitializeNavBar();
             Initialize();
+        }
+
+        void InitializeNavBar()
+        {
+            NavigationController.NavigationBar.BarTintColor = MovieExplorerAppearance.MOVIE_EXPLORER_DARK_GRAY;
+
+            Title = "Movie Explorer";
+            NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_ORANGE,
+                Font = MovieExplorerAppearance.GetNavBarTitleFont()
+            };
         }
 
         async void Initialize()
@@ -37,7 +50,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             };
 
             //Initialize UI
-            var contentFrame = View.Frame.AddTopMargin(MovieExplorerAppearance.STATUS_BAR_HEIGHT + MovieExplorerAppearance.NAVIGATION_BAR_HEIGHT);
+            var contentFrame = View.Frame.AddTopMargin(MovieExplorerAppearance.STATUS_BAR_HEIGHT + MovieExplorerAppearance.NAVIGATION_BAR_HEIGHT).AddBottomMargin();
             var verticalFrames = contentFrame.DivideVertical(movieListCount);
             for (int i = 0; i < movieListCount; i++)
             {

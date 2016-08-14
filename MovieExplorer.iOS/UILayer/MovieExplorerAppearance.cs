@@ -13,7 +13,7 @@ namespace MovieExplorer.iOS.UILayer
         public static readonly nfloat NAVIGATION_BAR_HEIGHT = 44.0f;
         public static readonly nfloat TOTAL_TOP_BAR_HEIGHT = STATUS_BAR_HEIGHT + NAVIGATION_BAR_HEIGHT;
 
-        public static readonly nfloat DEFAULT_MARGIN = 8.0f;
+        public static nfloat DEFAULT_MARGIN = 8.0f;
         public static readonly nfloat SMALL_MARGIN = 6.0f;
         public static readonly nfloat HALF_MARGIN = 4.0f;
         public static readonly nfloat BUTTON_INSETS = 6.0f;
@@ -22,9 +22,15 @@ namespace MovieExplorer.iOS.UILayer
         //FONTS
         public static readonly string BOLD_FONT_NAME = "Arial-BoldMT";
         public static readonly nfloat LARGE_FONT_SIZE = 14.0f;
+        public static readonly nfloat NAV_TITLE_FONT_SIZE = 20.0f;
         public static UIFont GetBoldFont()
         {
             return UIFont.FromName(BOLD_FONT_NAME, LARGE_FONT_SIZE);
+        }
+
+        public static UIFont GetNavBarTitleFont()
+        {
+            return UIFont.FromName(BOLD_FONT_NAME, NAV_TITLE_FONT_SIZE);
         }
 
         //SIZES

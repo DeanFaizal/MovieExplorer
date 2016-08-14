@@ -64,18 +64,38 @@ namespace MovieExplorer.iOS.UILayer
         {
             return new CGRect(frame.X, frame.Y + margin, frame.Width, frame.Height - margin);
         }
+        public static CGRect AddTopMargin(this CGRect frame)
+        {
+            return AddTopMargin(frame, MovieExplorerAppearance.DEFAULT_MARGIN);
+        }
+
         public static CGRect AddBottomMargin(this CGRect frame, nfloat margin)
         {
             return new CGRect(frame.X, frame.Y, frame.Width, frame.Height - margin);
         }
+        public static CGRect AddBottomMargin(this CGRect frame)
+        {
+            return AddBottomMargin(frame, MovieExplorerAppearance.DEFAULT_MARGIN);
+        }
+
         public static CGRect AddLeftMargin(this CGRect frame, nfloat margin)
         {
             return new CGRect(frame.X + margin, frame.Y, frame.Width - margin, frame.Height);
         }
+        public static CGRect AddLeftMargin(this CGRect frame)
+        {
+            return AddLeftMargin(frame, MovieExplorerAppearance.DEFAULT_MARGIN);
+        }
+
         public static CGRect AddRightMargin(this CGRect frame, nfloat margin)
         {
             return new CGRect(frame.X, frame.Y, frame.Width - margin, frame.Height);
         }
+        public static CGRect AddRightMargin(this CGRect frame)
+        {
+            return AddRightMargin(frame, MovieExplorerAppearance.DEFAULT_MARGIN);
+        }
+
 
         //Shrinks frame by margin
         public static CGRect AddMargin(this CGRect frame, nfloat margin)
@@ -98,6 +118,7 @@ namespace MovieExplorer.iOS.UILayer
         {
             return new CGPoint(frame.Width / 2, frame.Height / 2);
         }
+
         public static CGRect SetX(this CGRect frame, nfloat x)
         {
             return new CGRect(x, frame.Y, frame.Width, frame.Height);

@@ -37,7 +37,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private async Task Initialize()
         {
-            View.BackgroundColor = UIColor.White;
+            View.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_LIGHT_GRAY;
 
             var mainContentFrame = View.Frame.AddTopMargin(MovieExplorerAppearance.TOTAL_TOP_BAR_HEIGHT);
 
@@ -200,7 +200,8 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private HorizontalMovieScroller GenerateSimilarMoviesView(CGRect frame)
         {
-            var similarMoviesView = new HorizontalMovieScroller(frame, title: "Similar Movies");
+            var similarMoviesViewFrame = frame.AddBottomMargin();
+            var similarMoviesView = new HorizontalMovieScroller(similarMoviesViewFrame, title: "Similar Movies");
             similarMoviesView.MovieSelected += (sender, selectedMovie) =>
             {
                 var similarMovieDetailsVC = new MovieDetailsVC(selectedMovie);
