@@ -21,6 +21,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         List<Video> _videos;
         MovieExplorerButton _playVideoButton;
         UIImageView _posterImageView;
+        HorizontalMovieScrollerView _similarMoviesView;
         bool _isFavorite = false;
 
         UIButton _saveToFavoritesButton;
@@ -86,20 +87,19 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             return backgroundImageView;
         }
 
-        private async Task LoadData(HorizontalMovieScroller similarMoviesView)
+        private async Task LoadData(HorizontalMovieScrollerView similarMoviesView)
         {
             var loadPosterTask = LoadPoster();
             var updateFavoriteButtonTask = UpdateFavoriteButton();
-            var loadSimilarMoviesTask = similarMoviesView.LoadMovies(async () =>
-            {
-                return await MovieAccessor.Instance.GetSimilar(_movie.Id);
-            });
+
             var loadVideosTask = LoadVideos();
 
             await Task.WhenAll(loadPosterTask,
                 updateFavoriteButtonTask,
-                loadSimilarMoviesTask,
                 loadVideosTask);
+
+            var similarMovies = await MovieAccessor.Instance.GetSimilar(_movie.Id);
+            _similarMoviesView.AddMovies(similarMovies);
         }
 
         private UIView GenerateMovieDetailsView(CGRect frame)
@@ -330,17 +330,17 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             return movieDescriptionView;
         }
 
-        private HorizontalMovieScroller GenerateSimilarMoviesView(CGRect frame)
+        private HorizontalMovieScrollerView GenerateSimilarMoviesView(CGRect frame)
         {
             var similarMoviesViewFrame = frame.AddBottomMargin();
-            var similarMoviesView = new HorizontalMovieScroller(similarMoviesViewFrame, title: "Similar Movies");
-            similarMoviesView.MovieSelected += (sender, selectedMovie) =>
+            _similarMoviesView = new HorizontalMovieScrollerView(similarMoviesViewFrame, title: "Similar Movies");
+            _similarMoviesView.MovieSelected += (sender, selectedMovie) =>
             {
                 var similarMovieDetailsVC = new MovieDetailsVC(selectedMovie);
                 NavigationController.PushViewController(similarMovieDetailsVC, animated: true);
             };
 
-            return similarMoviesView;
+            return _similarMoviesView;
         }
 
         private async Task LoadVideos()

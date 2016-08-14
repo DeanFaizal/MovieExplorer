@@ -93,8 +93,8 @@
     <Compile Include="UILayer\Controls\MovieExplorerLabel.cs" />
     <Compile Include="UILayer\MovieExplorerAppearance.cs" />
     <Compile Include="UILayer\Controls\HorizontalFlowLayout.cs" />
-    <Compile Include="UILayer\Controls\HorizontalMovieScroller.cs" />
-    <Compile Include="UILayer\Controls\HorizontalMovieScrollerSource.cs" />
+    <Compile Include="UILayer\Controls\HorizontalMovieScrollerView.cs" />
+    <Compile Include="UILayer\Controls\MovieCollectionViewSource.cs" />
     <Compile Include="UILayer\Controls\MovieCell.cs" />
     <Compile Include="UILayer\FrameExtensions.cs" />
     <Compile Include="UILayer\UIImageExtensions.cs" />

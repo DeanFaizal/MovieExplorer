@@ -6,16 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using UIKit;
+using System.Linq;
 
 namespace MovieExplorer.iOS.UILayer.Controls
 {
-    public class HorizontalMovieScroller : UIView
+    public class HorizontalMovieScrollerView : UIView
     {
         public event EventHandler<Movie> MovieSelected;
-        UICollectionView _movieCollectionView;
-        HorizontalMovieScrollerSource _movieCollectionSource;
+        public event EventHandler<string> NextPageRequested;
 
-        public HorizontalMovieScroller(CGRect frame, string title, List<Movie> movies = null) : base(frame)
+        UICollectionView _movieCollectionView;
+        MovieCollectionViewSource _movieCollectionViewSource;
+
+        List<Movie> _movies = new List<Movie>();
+
+        public HorizontalMovieScrollerView(CGRect frame, string title) : base(frame)
         {
             frame = frame.Reset();
             var titleLabel = new BoldLabel(frame, title);
@@ -42,27 +47,23 @@ namespace MovieExplorer.iOS.UILayer.Controls
                 bottom: 0.0f,
                 right: MovieExplorerAppearance.DEFAULT_MARGIN);
             _movieCollectionView.RegisterClassForCell(typeof(MovieCell), MovieCell.CELL_ID);
-            _movieCollectionSource = new HorizontalMovieScrollerSource(movies);
-            _movieCollectionSource.MovieSelected += (sender, movie) =>
+            _movieCollectionViewSource = new MovieCollectionViewSource();
+            _movieCollectionViewSource.MovieSelected += (sender, movie) =>
             {
                 MovieSelected?.Invoke(this, movie);
             };
-            _movieCollectionView.Source = _movieCollectionSource;
+            _movieCollectionViewSource.NextPageRequested += (sender, args) =>
+            {
+                NextPageRequested?.Invoke(this, title);
+            };
+            _movieCollectionView.Source = _movieCollectionViewSource;
             AddSubview(_movieCollectionView);
         }
-
-        public async Task LoadMovies(Func<Task<List<Movie>>> loadTask)
+        
+        public void AddMovies(List<Movie> movies)
         {
-            Movies = await loadTask();
-        }
-
-        public List<Movie> Movies
-        {
-            set
-            {
-                _movieCollectionSource.Movies = value;
-                _movieCollectionView.ReloadData();
-            }
+            _movieCollectionViewSource.AddMovies(movies);            
+            _movieCollectionView.ReloadData();
         }
     }
 }
