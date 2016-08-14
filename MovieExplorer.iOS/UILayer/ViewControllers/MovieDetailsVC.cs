@@ -281,13 +281,26 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private void PlayVideo()
         {
-            if (_videos != null)
+            try
             {
-                var video = _videos.FirstOrDefault(a => a.Site.ToLower().Equals("youtube"));
-                if (video != null)
+                if (_videos != null)
                 {
-                    UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(string.Format("https://www.youtube.com/watch?v={0}", video.Key)));
+                    var video = _videos.FirstOrDefault(a => a.Site.ToLower().Equals("youtube"));
+                    if (video != null)
+                    {
+                        UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(string.Format("https://www.youtube.com/watch?v={0}", video.Key)));
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                var alert = new UIAlertView()
+                {
+                    Title = "An error occurred",
+                    Message = "Unable to play video"
+                };
+                alert.AddButton("OK");
+                alert.Show();
             }
         }
 
