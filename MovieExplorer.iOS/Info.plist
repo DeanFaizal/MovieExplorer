@@ -45,5 +45,7 @@
 	</array>
 	<key>UIStatusBarHidden</key>
 	<true/>
+	<key>CFBundleName</key>
+	<string>Movie Explorer</string>
 </dict>
 </plist>
