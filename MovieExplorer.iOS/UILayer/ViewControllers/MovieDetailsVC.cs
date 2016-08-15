@@ -135,7 +135,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
         private async Task LoadPoster()
         {
-            var poster = await _movie.PosterPath.LoadImageFromUrl();
+            var poster = await ImageCache.Instance.GetOrDownloadImage(_movie.PosterPath);
             if (poster != null)
             {
                 _posterImageView.Image = poster;
