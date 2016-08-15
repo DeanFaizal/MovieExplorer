@@ -50,9 +50,9 @@ namespace MovieExplorer.Core.ServiceAccessLayer
             var url = string.Format("{0}{1}?api_key={2}&sort_by=popularity.des&page={3}", ROOT_URL, endpoint, API_KEY, page);
             return await Fetch<T>(url);
         }
-        private async Task<T> FetchForMovie<T>(string endpoint, int movieId)
+        private async Task<T> FetchForMovie<T>(string endpoint, int movieId, int page = 1)
         {
-            var url = string.Format("{0}{1}/{2}?api_key={3}", ROOT_URL, movieId, endpoint, API_KEY);
+            var url = string.Format("{0}{1}/{2}?api_key={3}&page={4}", ROOT_URL, movieId, endpoint, API_KEY, page);
             return await Fetch<T>(url);
         }
 
@@ -64,36 +64,63 @@ namespace MovieExplorer.Core.ServiceAccessLayer
                 var results = await FetchMovieList<MovieResults>(endpoint: "now_playing", page: page);
                 return results.Movies;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
             }
+            return null;
         }
 
         public async Task<List<Movie>> GetTopRated(int page = 1)
         {
-            var results = await FetchMovieList<MovieResults>(endpoint: "top_rated", page: page);
-            return results.Movies;
+            try
+            {
+                var results = await FetchMovieList<MovieResults>(endpoint: "top_rated", page: page);
+                return results.Movies;
+            }
+            catch (Exception)
+            {
+            }
+            return null;
         }
 
         public async Task<List<Movie>> GetPopular(int page = 1)
         {
-            var results = await FetchMovieList<MovieResults>(endpoint: "popular", page: page);
-            return results.Movies;
+            try
+            {
+                var results = await FetchMovieList<MovieResults>(endpoint: "popular", page: page);
+                return results.Movies;
+            }
+            catch (Exception)
+            {
+            }
+            return null;
         }
 
 
-        public async Task<List<Movie>> GetSimilar(int movieId)
+        public async Task<List<Movie>> GetSimilar(int movieId, int page = 1)
         {
-            var results = await FetchForMovie<MovieResults>(endpoint: "similar", movieId: movieId);
-            return results.Movies;
+            try
+            {
+                var results = await FetchForMovie<MovieResults>(endpoint: "similar", movieId: movieId, page: page);                
+                return results.Movies;
+            }
+            catch (Exception)
+            {
+            }
+            return null;
         }
 
         public async Task<List<Video>> GetVideos(int movieId)
         {
-            var results = await FetchForMovie<VideoResults>(endpoint: "videos", movieId: movieId);
-            return results.Videos;
+            try
+            {
+                var results = await FetchForMovie<VideoResults>(endpoint: "videos", movieId: movieId);
+                return results.Videos;
+            }
+            catch (Exception)
+            {
+            }
+            return null;
         }
-
     }
 }

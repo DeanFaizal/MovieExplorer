@@ -44,8 +44,11 @@ namespace MovieExplorer.iOS.UILayer.Controls
                 loadingCell = new Movie { Id = MovieCell.LOADING_CELL_ID };
             }
 
-            _movies.AddRange(movies);
-            _movies.Add(loadingCell); //add the loading cell to the end to trigger infinite scroll
+            if (movies != null && movies.Count != 0) //don't load more if there aren't any movies left
+            {
+                _movies.AddRange(movies);
+                _movies.Add(loadingCell); //add the loading cell to the end to trigger infinite scroll
+            }
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)

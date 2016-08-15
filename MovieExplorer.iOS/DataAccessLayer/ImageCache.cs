@@ -11,6 +11,8 @@ namespace MovieExplorer.iOS.DataAccessLayer
 {
     public class ImageCache
     {
+        private readonly int MAX_IMAGE_COUNT = 40;
+        private ConcurrentQueue<string> _imageDictionaryKeyQueue = new ConcurrentQueue<string>();
         private ConcurrentDictionary<string, UIImage> _imageDictionary = new ConcurrentDictionary<string, UIImage>();
 
         private static Lazy<ImageCache> _instance = new Lazy<ImageCache>();
@@ -42,7 +44,20 @@ namespace MovieExplorer.iOS.DataAccessLayer
                     image = await imageUrl.LoadImageFromUrl().ConfigureAwait(false);
                     if (!_imageDictionary.ContainsKey(imageUrl) && image!= default(UIImage))
                     {
-                        _imageDictionary.TryAdd(imageUrl, image);
+                        var addSuccess = _imageDictionary.TryAdd(imageUrl, image);
+                        if (addSuccess)
+                        {
+                            _imageDictionaryKeyQueue.Enqueue(imageUrl);
+                            if (_imageDictionaryKeyQueue.Count > MAX_IMAGE_COUNT)
+                            {
+                                var keyToRemove = string.Empty;
+                                if(_imageDictionaryKeyQueue.TryDequeue(out keyToRemove))
+                                {
+                                    UIImage removedImage;
+                                    _imageDictionary.TryRemove(keyToRemove, out removedImage);
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -22,6 +22,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         MovieExplorerButton _playVideoButton;
         UIImageView _posterImageView;
         HorizontalMovieScrollerView _similarMoviesView;
+        int _currentSimilarMoviePage = 1;
         bool _isFavorite = false;
 
         UIButton _saveToFavoritesButton;
@@ -338,6 +339,13 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
             {
                 var similarMovieDetailsVC = new MovieDetailsVC(selectedMovie);
                 NavigationController.PushViewController(similarMovieDetailsVC, animated: true);
+            };
+
+            _similarMoviesView.NextPageRequested += async (sender, args) =>
+            {
+                _currentSimilarMoviePage += 1;
+                var movies = await MovieAccessor.Instance.GetSimilar(_movie.Id, _currentSimilarMoviePage);
+                _similarMoviesView.AddMovies(movies);
             };
 
             return _similarMoviesView;

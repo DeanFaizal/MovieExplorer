@@ -100,7 +100,7 @@ namespace MovieExplorer.iOS.UILayer
         {
             get
             {
-                var tallDeviceHeightToWidthRatio = 16.0f / 9.0f;
+                var tallDeviceHeightToWidthRatio = 1.775f; //from iPhone 6s
                 var screenBounds = UIScreen.MainScreen.Bounds;
                 var screenHeightToWidthRatio = screenBounds.Height / screenBounds.Width;
                 if (screenHeightToWidthRatio >= tallDeviceHeightToWidthRatio)
