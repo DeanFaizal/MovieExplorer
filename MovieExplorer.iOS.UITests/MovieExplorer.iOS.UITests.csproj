@@ -63,5 +63,17 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MovieExplorer.iOS\MovieExplorer.iOS.csproj">
+      <Project>{C46F4B8E-20E6-49AA-93AB-650A78B3C515}</Project>
+      <Name>MovieExplorer.iOS</Name>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\MovieExplorer.Core\MovieExplorer.Core.csproj">
+      <Project>{396AE239-8876-4B9D-93EC-1D52EAE0E340}</Project>
+      <Name>MovieExplorer.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
