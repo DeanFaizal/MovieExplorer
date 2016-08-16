@@ -24,6 +24,7 @@ namespace MovieExplorer.Core.ServiceAccessLayer
 
         private readonly string API_KEY = "ab41356b33d100ec61e6c098ecc92140";
         private readonly string ROOT_URL = "http://api.themoviedb.org/3/movie/";
+        private readonly string ROOT_SEARCH_URL = "http://api.themoviedb.org/3/search/movie/";
 
 
         private async Task<T> Fetch<T>(string url)
@@ -50,6 +51,7 @@ namespace MovieExplorer.Core.ServiceAccessLayer
             var url = string.Format("{0}{1}?api_key={2}&sort_by=popularity.des&page={3}", ROOT_URL, endpoint, API_KEY, page);
             return await Fetch<T>(url);
         }
+
         private async Task<T> FetchForMovie<T>(string endpoint, int movieId, int page = 1)
         {
             var url = string.Format("{0}{1}/{2}?api_key={3}&page={4}", ROOT_URL, movieId, endpoint, API_KEY, page);
@@ -118,6 +120,20 @@ namespace MovieExplorer.Core.ServiceAccessLayer
                 return results.Videos;
             }
             catch (Exception)
+            {
+            }
+            return null;
+        }
+
+        public async Task<List<Movie>> Search(string searchQuery, int page = 1)
+        {
+            try
+            {
+                var url = string.Format("{0}?api_key={1}&sort_by=popularity.des&page={2}&query={3}", ROOT_SEARCH_URL, API_KEY, page, searchQuery);
+                var searchResults = await Fetch<MovieResults>(url);
+                return searchResults.Movies;
+            }
+            catch (Exception ex)
             {
             }
             return null;

@@ -69,5 +69,15 @@ namespace MovieExplorer.Core.Tests
             }
         }
 
+        [TestMethod]
+        public async Task TestSearchMovies()
+        {
+            var searchQuery = "panda";
+            var results = await MovieAccessor.Instance.Search(searchQuery);  //at least one of the kungfu pandas should make it
+
+            Assert.IsNotNull(results);
+            Assert.IsInstanceOfType(results, typeof(List<Movie>));
+            Assert.AreNotEqual(0, results.Count);
+        }
     }
 }
