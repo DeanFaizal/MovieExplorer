@@ -10,6 +10,7 @@ using MovieExplorer.Core.ServiceLayer.Model;
 using MovieExplorer.Core.DataAccessLayer;
 using MovieExplorer.iOS.DataAccessLayer;
 using CoreAnimation;
+using MovieExplorer.Core.ServiceAccessLayer;
 
 namespace MovieExplorer.iOS.UILayer.Controls
 {
@@ -64,12 +65,14 @@ namespace MovieExplorer.iOS.UILayer.Controls
             BackgroundColor = UIColor.White;
             _activityIndicatorView.StopAnimating();
             var posterUrl = movie.PosterPath;
-            if (!ImageCache.Instance.IsCached(posterUrl))
-            {
-                _imageView.Image = UIImage.FromBundle("Assets/Placeholder.png");
-            }
+
+            _imageView.Image = UIImage.FromBundle("Assets/Placeholder.png");
+
             var uiImage = await ImageCache.Instance.GetOrDownloadImage(posterUrl);
-            _imageView.Image = uiImage;
+            if (uiImage!=null && uiImage.CGImage != null)
+            {
+                _imageView.Image = uiImage;
+            }
         }
 
         public void SetLoadingCell()

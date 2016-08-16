@@ -24,10 +24,11 @@ namespace MovieExplorer.iOS.UILayer.Controls
         MovieListType _movieListType;
         bool _isLoading;
         UIActivityIndicatorView _loadingIndicatorView;
+        UILabel _noResultsLabel;
 
-        public HorizontalMovieScrollerView(CGRect frame, MovieListType movieListType) : base(frame)
+        public HorizontalMovieScrollerView(CGRect frame, MovieListType movieListType, bool showLoading = true, bool loadMore = true) : base(frame)
         {
-            _isLoading = true;
+            _isLoading = showLoading;
             _movieListType = movieListType;
 
 
@@ -39,16 +40,21 @@ namespace MovieExplorer.iOS.UILayer.Controls
             AddSubview(titleLabel);
 
             var movieCollectionViewFrame = frame.AddTopMargin(titleLabel.Frame.Bottom + MovieExplorerAppearance.HALF_MARGIN);
-            
-            ShowLoadingView(movieCollectionViewFrame);
+
+            InitializeLoadingView(movieCollectionViewFrame);
+            InitializeNoResultsView(movieCollectionViewFrame);
 
             var itemHeight = movieCollectionViewFrame.Height;
+
             var itemWidth = MovieExplorerAppearance.POSTER_WIDTH_TO_HEIGHT_RATIO * itemHeight;
 
             _movieCollectionView = new UICollectionView(movieCollectionViewFrame, new UICollectionViewFlowLayout
             {
                 ItemSize = new CGSize(itemWidth, itemHeight),
-                ScrollDirection = UICollectionViewScrollDirection.Horizontal
+                ScrollDirection = UICollectionViewScrollDirection.Horizontal,
+                MinimumInteritemSpacing = MovieExplorerAppearance.DEFAULT_MARGIN,
+                MinimumLineSpacing = MovieExplorerAppearance.DEFAULT_MARGIN,
+                SectionInset = new UIEdgeInsets(0, 0, 0, 0)
             });
             _movieCollectionView.BackgroundColor = UIColor.Clear;
             _movieCollectionView.ShowsHorizontalScrollIndicator = false;
@@ -60,7 +66,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
                 bottom: 0.0f,
                 right: MovieExplorerAppearance.DEFAULT_MARGIN);
             _movieCollectionView.RegisterClassForCell(typeof(MovieCell), MovieCell.CELL_ID);
-            _movieCollectionViewSource = new MovieCollectionViewSource();
+            _movieCollectionViewSource = new MovieCollectionViewSource(loadMore);
             _movieCollectionViewSource.MovieSelected += (sender, movie) =>
             {
                 MovieSelected?.Invoke(this, movie);
@@ -74,13 +80,26 @@ namespace MovieExplorer.iOS.UILayer.Controls
             AddSubview(_movieCollectionView);
         }
 
-        private void ShowLoadingView(CGRect frame)
+        private void InitializeLoadingView(CGRect frame)
         {
             _loadingIndicatorView = new UIActivityIndicatorView(frame);
             _loadingIndicatorView.ActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge;
             _loadingIndicatorView.HidesWhenStopped = true;
-            _loadingIndicatorView.StartAnimating();
+            if (_isLoading)
+            {
+                _loadingIndicatorView.StartAnimating();
+            }
             AddSubview(_loadingIndicatorView);
+        }
+
+        private void InitializeNoResultsView(CGRect frame)
+        {
+            _noResultsLabel = new BoldLabel(frame, "No results");
+            _noResultsLabel.SizeToFit();
+            _noResultsLabel.Center = frame.GetCenter();
+            _noResultsLabel.Hidden = true;
+
+            AddSubview(_noResultsLabel);
         }
 
         public void AddMovies(List<Movie> movies)
@@ -95,6 +114,21 @@ namespace MovieExplorer.iOS.UILayer.Controls
                 _movieCollectionViewSource.StopAnimatingItemsIn(); //stop animating before reloading items to make sure loaded movies don't flicker
             }
             _movieCollectionViewSource.AddMovies(movies);
+            _movieCollectionView.ReloadData();
+
+            if (!_movieCollectionViewSource.HasMovies())
+            {
+                _noResultsLabel.Hidden = false;
+            }
+            else
+            {
+                _noResultsLabel.Hidden = true;
+            }
+        }
+
+        public void ClearMovies()
+        {
+            _movieCollectionViewSource.ClearMovies();
             _movieCollectionView.ReloadData();
         }
     }

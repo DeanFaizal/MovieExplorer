@@ -14,8 +14,9 @@ namespace MovieExplorer.iOS.UILayer.Controls
     {
         public event EventHandler<Movie> MovieSelected;
         public event EventHandler NextPageRequested;
-
+                
         List<Movie> _movies = new List<Movie>();
+        bool _loadMore = true;
         bool _isAnimating = true;
 
         public List<Movie> Movies
@@ -24,6 +25,11 @@ namespace MovieExplorer.iOS.UILayer.Controls
             {
                 return _movies;
             }
+        }
+
+        public MovieCollectionViewSource(bool loadMore = true)
+        {
+            _loadMore = loadMore;
         }
 
         public void AddMovies(List<Movie> movies)
@@ -42,8 +48,21 @@ namespace MovieExplorer.iOS.UILayer.Controls
             if (movies != null && movies.Count != 0) //don't load more if there aren't any movies left
             {
                 _movies.AddRange(movies);
-                _movies.Add(loadingCell); //add the loading cell to the end to trigger infinite scroll
+                if (_loadMore)
+                {
+                    _movies.Add(loadingCell); //add the loading cell to the end to trigger infinite scroll
+                }
             }
+        }
+
+        public bool HasMovies()
+        {
+            return _movies.Any();
+        }
+
+        public void ClearMovies()
+        {
+            _movies.Clear();
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)

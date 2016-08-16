@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using UIKit;
 using MovieExplorer.iOS.UILayer;
 using System.Collections.Concurrent;
+using MovieExplorer.Core.ServiceAccessLayer;
 
 namespace MovieExplorer.iOS.DataAccessLayer
 {
     public class ImageCache
     {
         private readonly int MAX_IMAGE_COUNT = 40;
-        private ConcurrentQueue<string> _imageDictionaryKeyQueue = new ConcurrentQueue<string>();
+        private ConcurrentQueue<string> _imageDictionaryKeyQueue = new ConcurrentQueue<string>(); //Keep track of the most recent urls
         private ConcurrentDictionary<string, UIImage> _imageDictionary = new ConcurrentDictionary<string, UIImage>();
 
         private static Lazy<ImageCache> _instance = new Lazy<ImageCache>();
@@ -27,41 +28,60 @@ namespace MovieExplorer.iOS.DataAccessLayer
 
         public bool IsCached(string imagePath)
         {
-            return _imageDictionary.ContainsKey(imagePath);
+            if (IsValidImagePath(imagePath))
+            {
+                return _imageDictionary.ContainsKey(imagePath);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<UIImage> GetOrDownloadImage(string imageUrl)
         {
-            UIImage image = null;
-            if (!string.IsNullOrEmpty(imageUrl))
+            try
             {
-                if (_imageDictionary.ContainsKey(imageUrl))
+                UIImage image = null;
+                if (IsValidImagePath(imageUrl))
                 {
-                    image = _imageDictionary[imageUrl];
-                }
-                else
-                {
-                    image = await imageUrl.LoadImageFromUrl().ConfigureAwait(false);
-                    if (!_imageDictionary.ContainsKey(imageUrl) && image!= default(UIImage))
+                    if (_imageDictionary.ContainsKey(imageUrl))
                     {
-                        var addSuccess = _imageDictionary.TryAdd(imageUrl, image);
-                        if (addSuccess)
+                        image = _imageDictionary[imageUrl];
+                    }
+                    else
+                    {
+                        image = await imageUrl.LoadImageFromUrl().ConfigureAwait(false);
+                        if (!_imageDictionary.ContainsKey(imageUrl) && image != default(UIImage)) //if the image isn't in the cache
                         {
-                            _imageDictionaryKeyQueue.Enqueue(imageUrl);
-                            if (_imageDictionaryKeyQueue.Count > MAX_IMAGE_COUNT)
+                            var addSuccess = _imageDictionary.TryAdd(imageUrl, image); //add it
+                            if (addSuccess)
                             {
-                                var keyToRemove = string.Empty;
-                                if(_imageDictionaryKeyQueue.TryDequeue(out keyToRemove))
+                                _imageDictionaryKeyQueue.Enqueue(imageUrl); //add the key to the queue
+                                if (_imageDictionaryKeyQueue.Count > MAX_IMAGE_COUNT) //if the queue is full
                                 {
-                                    UIImage removedImage;
-                                    _imageDictionary.TryRemove(keyToRemove, out removedImage);
+                                    var keyToRemove = string.Empty;
+                                    if (_imageDictionaryKeyQueue.TryDequeue(out keyToRemove)) //dequeue the oldest key
+                                    {
+                                        UIImage removedImage;
+                                        _imageDictionary.TryRemove(keyToRemove, out removedImage); //and remove it
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                return image;
             }
-            return image;
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private bool IsValidImagePath(string imagePath)
+        {
+            return !string.IsNullOrEmpty(imagePath) && !imagePath.Equals(MovieAccessor.Instance.DEFAULT_POSTER_PATH);
         }
     }
 }

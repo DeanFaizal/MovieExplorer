@@ -25,6 +25,7 @@ namespace MovieExplorer.Core.ServiceAccessLayer
         private readonly string API_KEY = "ab41356b33d100ec61e6c098ecc92140";
         private readonly string ROOT_URL = "http://api.themoviedb.org/3/movie/";
         private readonly string ROOT_SEARCH_URL = "http://api.themoviedb.org/3/search/movie/";
+        public readonly string DEFAULT_POSTER_PATH = "http://image.tmdb.org/t/p/w500/";
 
 
         private async Task<T> Fetch<T>(string url)

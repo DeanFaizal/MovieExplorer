@@ -34,6 +34,7 @@ namespace MovieExplorer.iOS.UILayer
         public static readonly UIColor MOVIE_EXPLORER_ORANGE = UIColor.FromRGB(225, 155, 44);
         public static readonly UIColor MOVIE_EXPLORER_GREEN = UIColor.FromRGB(163, 202, 25);
         public static readonly UIColor MOVIE_EXPLORER_BRIGHT_ORANGE = UIColor.FromRGB(219, 176, 1);
+        public static readonly UIColor MOVIE_EXPLORER_EXTRA_LIGHT_GRAY = UIColor.FromRGB(120, 120, 120);
         public static readonly UIColor MOVIE_EXPLORER_LIGHT_GRAY = UIColor.FromRGB(85, 85, 85);
         public static readonly UIColor MOVIE_EXPLORER_DARK_GRAY = UIColor.FromRGB(50, 50, 50);
 

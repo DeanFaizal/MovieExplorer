@@ -16,6 +16,8 @@ namespace MovieExplorer.Core.ServiceAccessLayer
         [EnumDescription("Now Playing")]
         NowPlaying,
         [EnumDescription("Similar")]
-        Similar
+        Similar,
+        [EnumDescription("Search Results")]
+        SearchResults        
     }
 }

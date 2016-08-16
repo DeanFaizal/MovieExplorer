@@ -11,7 +11,7 @@ using MovieExplorer.Core.ServiceAccessLayer;
 using System.Runtime.CompilerServices;
 using Reachability;
 using MovieExplorer.Core.BusinessLayer;
-using CBZSplashViewBinding;
+
 
 namespace MovieExplorer.iOS.UILayer.ViewControllers
 {
@@ -33,12 +33,26 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         {
             base.ViewDidLoad();
             Initialize();
+            InitializeSearch();
+        }
+
+        private void InitializeSearch()
+        {
+            var searchBarButtonItem = new UIBarButtonItem(UIBarButtonSystemItem.Search, handler: (sender, args) =>
+            {
+                var searchViewController = new SearchVC();
+                var searchNavigationViewController = new UINavigationController(searchViewController);
+                searchNavigationViewController.ModalPresentationStyle = UIModalPresentationStyle.CurrentContext;
+                PresentModalViewController(searchNavigationViewController, animated: true);
+            });
+            searchBarButtonItem.TintColor = MovieExplorerAppearance.MOVIE_EXPLORER_EXTRA_LIGHT_GRAY;
+            NavigationItem.SetRightBarButtonItem(searchBarButtonItem, animated: true);
         }
 
         private async void Initialize()
         {
             try
-            {           
+            {
                 Title = "Movie Explorer";
 
                 View.BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_LIGHT_GRAY;
