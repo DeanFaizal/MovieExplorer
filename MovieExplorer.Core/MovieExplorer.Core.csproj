@@ -35,15 +35,16 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="BusinessLayer\" />
     <Folder Include="DataLayer\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AkavacheSqliteLinkerOverride.cs" />
+    <Compile Include="BusinessLayer\EnumExtensions.cs" />
     <Compile Include="DataAccessLayer\FavoritesAccessor.cs" />
     <Compile Include="DataAccessLayer\LocalCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceAccessLayer\MovieAccessor.cs" />
+    <Compile Include="ServiceAccessLayer\MovieListEnum.cs" />
     <Compile Include="ServiceLayer\Model\Dates.cs" />
     <Compile Include="ServiceLayer\Model\Movie.cs" />
     <Compile Include="ServiceLayer\Model\MovieServiceResult.cs" />

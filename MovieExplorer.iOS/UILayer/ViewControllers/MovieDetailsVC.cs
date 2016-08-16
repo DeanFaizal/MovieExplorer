@@ -334,7 +334,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
         private HorizontalMovieScrollerView GenerateSimilarMoviesView(CGRect frame)
         {
             var similarMoviesViewFrame = frame.AddBottomMargin();
-            _similarMoviesView = new HorizontalMovieScrollerView(similarMoviesViewFrame, title: "Similar Movies");
+            _similarMoviesView = new HorizontalMovieScrollerView(similarMoviesViewFrame, movieListType: MovieListType.Similar);
             _similarMoviesView.MovieSelected += (sender, selectedMovie) =>
             {
                 var similarMovieDetailsVC = new MovieDetailsVC(selectedMovie);

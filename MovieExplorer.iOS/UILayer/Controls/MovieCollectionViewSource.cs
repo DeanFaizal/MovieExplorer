@@ -16,6 +16,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
         public event EventHandler NextPageRequested;
 
         List<Movie> _movies = new List<Movie>();
+        bool _isAnimating = true;
 
         public List<Movie> Movies
         {
@@ -23,12 +24,6 @@ namespace MovieExplorer.iOS.UILayer.Controls
             {
                 return _movies;
             }
-        }
-
-
-        public MovieCollectionViewSource()
-        {
-
         }
 
         public void AddMovies(List<Movie> movies)
@@ -78,8 +73,16 @@ namespace MovieExplorer.iOS.UILayer.Controls
             {
                 movieCell.SetMovie(movie);
             }
-
+            if (_isAnimating)
+            {
+                movieCell.AnimateIn();
+            }
             return movieCell;
+        }
+
+        public override void Scrolled(UIScrollView scrollView)
+        {
+            _isAnimating = true; //Start animating again on scrolled
         }
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
@@ -99,6 +102,14 @@ namespace MovieExplorer.iOS.UILayer.Controls
             {
                 MovieSelected?.Invoke(this, movie);
             }
+        }
+
+        /// <summary>
+        /// Stop animating when more movies are added so that the movies don't flicker in place
+        /// </summary>
+        public void StopAnimatingItemsIn()
+        {
+            _isAnimating = false;
         }
     }
 }

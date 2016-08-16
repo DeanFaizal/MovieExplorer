@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using MovieExplorer.Core.ServiceLayer.Model;
 using MovieExplorer.Core.DataAccessLayer;
 using MovieExplorer.iOS.DataAccessLayer;
+using CoreAnimation;
 
 namespace MovieExplorer.iOS.UILayer.Controls
 {
@@ -36,7 +37,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
                 Alpha = 1.0f;
             });
 
-            
+
             //Loading View
             _loadingView = new UIView(frame.Reset());
 
@@ -68,16 +69,7 @@ namespace MovieExplorer.iOS.UILayer.Controls
                 _imageView.Image = UIImage.FromBundle("Assets/Placeholder.png");
             }
             var uiImage = await ImageCache.Instance.GetOrDownloadImage(posterUrl);
-
-            if (uiImage != null)
-            {
-                Alpha = 0.0f;
-                _imageView.Image = uiImage;
-                Animate(0.2d, () =>
-                {
-                    Alpha = 1.0f;
-                });
-            }
+            _imageView.Image = uiImage;
         }
 
         public void SetLoadingCell()
@@ -86,6 +78,15 @@ namespace MovieExplorer.iOS.UILayer.Controls
             BackgroundColor = MovieExplorerAppearance.MOVIE_EXPLORER_ORANGE;
             _activityIndicatorView.StartAnimating();
             _loadingView.Alpha = 1.0f;
+        }
+
+        public void AnimateIn()
+        {
+            Alpha = 0.0f;
+            Animate(0.2d, () =>
+            {
+                Alpha = 1.0f;
+            });
         }
     }
 }
