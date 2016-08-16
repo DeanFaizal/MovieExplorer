@@ -50,7 +50,7 @@ namespace MovieExplorer.iOS.UILayer.ViewControllers
 
 			View.AddGestureRecognizer (new UITapGestureRecognizer (() => {
 				searchBox.ResignFirstResponder ();
-			}));
+			}) { CancelsTouchesInView = false });
 
 
 			var searchTextChangedObservable = Observable.FromEventPattern<UISearchBarTextChangedEventArgs> (
