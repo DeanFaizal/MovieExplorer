@@ -43,6 +43,22 @@ namespace iOSUITest
 		}
 
 		[Test]
+		public void SaveToFavorites ()
+		{
+			app.Tap (a => a.Class ("MovieExplorer_iOS_UILayer_Controls_MovieCell"));
+			app.Tap (a => a.Marked ("Save to Favorites"));
+			app.Screenshot ("Save to Favorites");
+		}
+
+		[Test]
+		public void PlayVideo ()
+		{
+			app.Tap (a => a.Class ("MovieExplorer_iOS_UILayer_Controls_MovieCell"));
+			app.Tap (a => a.Marked ("Play Video"));
+			app.Screenshot ("Playing video");
+		}
+
+		[Test]
 		public void OpenSimilarMovieDetails ()
 		{
 			app.Tap (a => a.Class ("MovieExplorer_iOS_UILayer_Controls_MovieCell"));
